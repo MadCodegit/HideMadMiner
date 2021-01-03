@@ -12,3 +12,5 @@ English 🇺🇸
 ✅ Startup
 ✅ Mine XMR on CPU and ETH on GPU
 ✅ Protection from task managers (aggressive, does not allow them to open and complete the mining process)
+
+https://t.me/MadCodechannel
