@@ -1,4 +1,4 @@
-# HideMadMiner
+# Mad Miner Source C# .Net 4.0 XMR(CPU) + ETH(GPU)
 Russian 🇷🇺
 ⛏ Mad Miner Source C# .Net 4.0 XMR(CPU) + ETH(GPU)
 ✅ Скрытый запуск
