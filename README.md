@@ -13,4 +13,4 @@ English 🇺🇸
 ✅ Mine XMR on CPU and ETH on GPU
 ✅ Protection from task managers (aggressive, does not allow them to open and complete the mining process)
 
-https://excoder.cc/ - Malware Shop
+https://t.me/ext_coder - Malware Shop
